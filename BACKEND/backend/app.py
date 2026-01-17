@@ -1,11 +1,10 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-import torch
 import shutil
 import os
 import logging
 
-# Lazy imports for models to speed up cold starts on Vercel
+# Lazy imports for torch - will be imported only when needed
 logger = logging.getLogger("deepfake-api")
 logging.basicConfig(level=logging.INFO)
 
@@ -41,9 +40,20 @@ AUDIO_EXT = (".wav", ".mp3")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(FRAME_DIR, exist_ok=True)
 
-# DEVICE
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-logger.info(f"Using device: {device}")
+# DEVICE - lazy load torch
+device = None
+
+def get_device():
+    global device
+    if device is None:
+        try:
+            import torch
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            logger.info(f"Using device: {device}")
+        except ImportError:
+            logger.warning("PyTorch not available")
+            device = "cpu"
+    return device
 
 # Global model caches - lazy load
 _image_model = None
@@ -53,7 +63,9 @@ def load_image_model():
     global _image_model, _image_model_loaded
     if not _image_model_loaded:
         try:
+            import torch
             from backend.models.image_model import DeepfakeImageModel
+            device = get_device()
             _image_model = DeepfakeImageModel().to(device)
             checkpoint = torch.load(IMAGE_MODEL_PATH, map_location=device)
             if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
@@ -75,10 +87,16 @@ def root():
 
 @app.get("/health")
 def health():
+    try:
+        import torch
+        cuda_available = torch.cuda.is_available()
+    except ImportError:
+        cuda_available = False
+    
     return {
         "status": "ok",
-        "device": str(device),
-        "cuda_available": torch.cuda.is_available()
+        "device": str(get_device()),
+        "cuda_available": cuda_available
     }
 
 @app.post("/predict")
