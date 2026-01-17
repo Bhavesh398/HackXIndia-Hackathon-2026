@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Add this CORS configuration
+# Add CORS configuration - includes Vercel deployments
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -21,6 +21,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:8080",
         "http://127.0.0.1:5173",
+        "https://truefy.vercel.app",  # Frontend Vercel URL
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -35,8 +36,8 @@ app = FastAPI(title="Deepfake Forensics API")
 
 # ---------------- CONFIG ----------------
 IMAGE_MODEL_PATH = "models/image_deepfake.pth"
-UPLOAD_DIR = "uploads"
-FRAME_DIR = "temp_frames"
+UPLOAD_DIR = "/tmp/uploads" if os.getenv("VERCEL") else "uploads"
+FRAME_DIR = "/tmp/temp_frames" if os.getenv("VERCEL") else "temp_frames"
 
 TEMPERATURE = 1.4
 FAKE_THRESHOLD = 0.70
