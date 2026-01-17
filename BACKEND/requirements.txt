@@ -2,10 +2,10 @@
 fastapi
 uvicorn
 
-# Core ML - CPU only for Vercel (much smaller)
-torch==2.0.1
-torchvision==0.15.2
-torchaudio==2.0.2
+# Core ML - CPU only with flexible versions for Python 3.9
+torch>=1.13.0,<2.2
+torchvision>=0.14.0,<0.17
+torchaudio>=0.13.0,<2.1
 
 # Computer Vision
 opencv-python
