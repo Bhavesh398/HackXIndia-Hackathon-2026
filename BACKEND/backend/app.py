@@ -3,10 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
 import logging
+import sys
 
 # Lazy imports for torch - will be imported only when needed
 logger = logging.getLogger("deepfake-api")
 logging.basicConfig(level=logging.INFO)
+
+# Ensure BACKEND directory is in path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 app = FastAPI(title="Deepfake Forensics API")
 
@@ -83,7 +87,11 @@ def load_image_model():
 # ROUTES
 @app.get("/")
 def root():
-    return {"message": "Deepfake Forensics API is running"}
+    return {"message": "Deepfake Forensics API is running", "status": "ok"}
+
+@app.get("/test")
+def test():
+    return {"test": "endpoint works"}
 
 @app.get("/health")
 def health():
