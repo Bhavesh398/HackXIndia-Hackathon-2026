@@ -2,10 +2,10 @@
 fastapi
 uvicorn
 
-# Core ML
-torch
-torchvision
-torchaudio
+# Core ML - CPU only for Vercel (much smaller)
+torch==2.0.1
+torchvision==0.15.2
+torchaudio==2.0.2
 
 # Computer Vision
 opencv-python
@@ -14,6 +14,7 @@ numpy
 
 # Audio
 librosa
+soundfile
 
 # Utilities
 tqdm
