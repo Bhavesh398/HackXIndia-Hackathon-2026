@@ -1,21 +1,21 @@
 # Backend
-fastapi
-uvicorn
+fastapi==0.104.1
+uvicorn==0.24.0
 
-# Core ML - CPU only with flexible versions for Python 3.9
-torch>=1.13.0,<2.2
-torchvision>=0.14.0,<0.17
-torchaudio>=0.13.0,<2.1
+# Core ML - Minimal dependencies
+torch==1.13.1
+torchvision==0.14.1
+torchaudio==0.13.1
 
 # Computer Vision
-opencv-python
-pillow
-numpy
+opencv-python==4.8.0.74
+pillow==10.0.1
+numpy==1.24.3
 
 # Audio
-librosa
-soundfile
+librosa==0.10.0
+soundfile==0.12.1
 
 # Utilities
-tqdm
-python-multipart
+tqdm==4.66.1
+python-multipart==0.0.6
