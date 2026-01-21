@@ -1,7 +1,7 @@
 # Truefy: Deepfake Forensics Platform
 
 End-to-end system to detect AI-generated media across images, videos, and audio. Combines a FastAPI + PyTorch backend with a modern Vite + React frontend.
-
+Google drive video link = https://drive.google.com/drive/folders/1iV4w0_NE8Bz9H_0CYxqlBKkN0JYps9Km?usp=drive_link
 ## Architecture
 - Backend: FastAPI service with image, video, and audio analysis. See BACKEND.
 - Frontend: React UI to upload media and display analysis. See FRONTEND.
@@ -47,3 +47,5 @@ POST /predict (multipart `file`)
 - Modular pipelines for image/video/audio.
 
 For more details, read BACKEND/README.md and FRONTEND/README.md.
+
+
