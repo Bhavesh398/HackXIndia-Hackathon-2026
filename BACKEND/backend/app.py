@@ -1,42 +1,41 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
+import torch
 import shutil
 import os
 import logging
-import sys
 
-# Lazy imports for torch - will be imported only when needed
-logger = logging.getLogger("deepfake-api")
-logging.basicConfig(level=logging.INFO)
+from backend.models.image_model import DeepfakeImageModel
+from backend.preprocessing.image import load_image
+from backend.video.frame_extractor import extract_frames
+from backend.audio.audio_inference import predict_audio
+from fastapi.middleware.cors import CORSMiddleware
 
-# Ensure BACKEND directory is in path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+# ---------------- APP ----------------
 app = FastAPI(title="Deepfake Forensics API")
 
-# Add CORS configuration - includes Vercel deployments
+# Add CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:8080",
         "http://localhost:5173",
-        "http://localhost:3000",
-        "http://localhost:8000",
         "http://127.0.0.1:8080",
         "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8000",
-        "https://truefy.vercel.app",  # Frontend Vercel URL
+        "https://hack-w-ins-project-r18a.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# CONFIG
+# ---------------- LOGGING ----------------
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("deepfake-api")
+
+# ---------------- CONFIG ----------------
 IMAGE_MODEL_PATH = "models/image_deepfake.pth"
-UPLOAD_DIR = "/tmp/uploads" if os.getenv("VERCEL") else "uploads"
-FRAME_DIR = "/tmp/temp_frames" if os.getenv("VERCEL") else "temp_frames"
+UPLOAD_DIR = "uploads"
+FRAME_DIR = "temp_frames"
 
 TEMPERATURE = 1.4
 FAKE_THRESHOLD = 0.70
@@ -48,69 +47,37 @@ AUDIO_EXT = (".wav", ".mp3")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(FRAME_DIR, exist_ok=True)
 
-# DEVICE - lazy load torch
-device = None
+# ---------------- DEVICE ----------------
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+logger.info(f"Using device: {device}")
 
-def get_device():
-    global device
-    if device is None:
-        try:
-            import torch
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            logger.info(f"Using device: {device}")
-        except ImportError:
-            logger.warning("PyTorch not available")
-            device = "cpu"
-    return device
+# ---------------- LOAD IMAGE MODEL ----------------
+image_model = DeepfakeImageModel().to(device)
 
-# Global model caches - lazy load
-_image_model = None
-_image_model_loaded = False
+if os.path.exists(IMAGE_MODEL_PATH):
+    checkpoint = torch.load(IMAGE_MODEL_PATH, map_location=device)
+    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+        image_model.load_state_dict(checkpoint["model_state_dict"])
+    else:
+        image_model.load_state_dict(checkpoint)
+    image_model.eval()
+else:
+    logger.warning(f"Image model not found at {IMAGE_MODEL_PATH}. Image inference may not work.")
 
-def load_image_model():
-    global _image_model, _image_model_loaded
-    if not _image_model_loaded:
-        try:
-            import torch
-            from backend.models.image_model import DeepfakeImageModel
-            device = get_device()
-            _image_model = DeepfakeImageModel().to(device)
-            checkpoint = torch.load(IMAGE_MODEL_PATH, map_location=device)
-            if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
-                _image_model.load_state_dict(checkpoint["model_state_dict"])
-            else:
-                _image_model.load_state_dict(checkpoint)
-            _image_model.eval()
-            _image_model_loaded = True
-            logger.info("Image model loaded successfully")
-        except Exception as e:
-            logger.error(f"Failed to load image model: {e}")
-            _image_model_loaded = False
-    return _image_model
-
-# ROUTES
+# ---------------- ROUTES ----------------
 @app.get("/")
 def root():
-    return {"message": "Deepfake Forensics API is running", "status": "ok"}
-
-@app.get("/test")
-def test():
-    return {"test": "endpoint works"}
+    return {"message": "Deepfake Forensics API is running"}
 
 @app.get("/health")
 def health():
-    try:
-        import torch
-        cuda_available = torch.cuda.is_available()
-    except ImportError:
-        cuda_available = False
-    
     return {
         "status": "ok",
-        "device": str(get_device()),
-        "cuda_available": cuda_available
+        "device": str(device),
+        "cuda_available": torch.cuda.is_available()
     }
 
+# ---------------- PREDICT ----------------
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     filename = file.filename.lower()
