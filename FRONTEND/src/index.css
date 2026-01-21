@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 217 91% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 20% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 217 20% 95%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 217 20% 92%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 71% 40%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 45%;
+    --warning-foreground: 222 47% 11%;
+
+    --danger: 0 84% 55%;
+    --danger-foreground: 210 40% 98%;
+
+    --border: 217 20% 88%;
+    --input: 217 20% 88%;
+    --ring: 217 91% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom forensic theme colors */
+    --forensic-navy: 222 47% 95%;
+    --forensic-steel: 215 25% 75%;
+    --forensic-charcoal: 220 26% 90%;
+    --forensic-glow: 217 91% 50%;
+    --forensic-cyan: 187 92% 40%;
+    --truefy-orange: 24 95% 53%;
+    --truefy-orange-dark: 17 88% 40%;
+
+    /* Gradients */
+    --gradient-dark: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(217 20% 95%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(217 20% 98%) 100%);
+    --gradient-danger: linear-gradient(135deg, hsl(0 84% 55%) 0%, hsl(0 72% 45%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 40%) 0%, hsl(142 76% 32%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 45%) 0%, hsl(32 95% 40%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(217 91% 40%) 100%);
+    --gradient-truefy: linear-gradient(135deg, hsl(24 95% 53%) 0%, hsl(17 88% 40%) 100%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px -10px hsl(217 91% 50% / 0.15);
+    --shadow-danger: 0 0 30px -5px hsl(0 84% 55% / 0.2);
+    --shadow-success: 0 0 30px -5px hsl(142 71% 40% / 0.2);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.08);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 217 91% 50%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217 20% 95%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 217 20% 88%;
+    --sidebar-ring: 217 91% 50%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 217 33% 14%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 96%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 222 47% 6%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 6%;
+
+    --danger: 0 84% 60%;
+    --danger-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
+
+    /* Custom forensic theme colors */
+    --forensic-navy: 222 47% 11%;
+    --forensic-steel: 215 25% 27%;
+    --forensic-charcoal: 220 26% 14%;
+    --forensic-glow: 217 91% 60%;
+    --forensic-cyan: 187 92% 53%;
+    --truefy-orange: 24 95% 53%;
+    --truefy-orange-dark: 17 88% 35%;
+
+    /* Gradients */
+    --gradient-dark: linear-gradient(135deg, hsl(222 47% 8%) 0%, hsl(222 47% 6%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(222 47% 10%) 0%, hsl(222 47% 7%) 100%);
+    --gradient-danger: linear-gradient(135deg, hsl(0 84% 60%) 0%, hsl(0 72% 45%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 76% 36%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(32 95% 44%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 45%) 100%);
+    --gradient-truefy: linear-gradient(135deg, hsl(24 95% 53%) 0%, hsl(17 88% 35%) 100%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px -10px hsl(217 91% 60% / 0.3);
+    --shadow-danger: 0 0 30px -5px hsl(0 84% 60% / 0.4);
+    --shadow-success: 0 0 30px -5px hsl(142 71% 45% / 0.4);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .forensic-card {
+    @apply bg-card rounded-lg border border-border backdrop-blur-sm;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .forensic-card-glow {
+    @apply forensic-card;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .forensic-card-danger {
+    @apply forensic-card border-destructive/50;
+    box-shadow: var(--shadow-danger);
+  }
+
+  .forensic-card-success {
+    @apply forensic-card border-success/50;
+    box-shadow: var(--shadow-success);
+  }
+
+  .status-indicator {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium;
+  }
+
+  .status-active {
+    @apply status-indicator bg-success/20 text-success;
+  }
+
+  .status-warning {
+    @apply status-indicator bg-warning/20 text-warning;
+  }
+
+  .status-danger {
+    @apply status-indicator bg-destructive/20 text-destructive;
+  }
+
+  .threat-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .threat-low {
+    @apply threat-badge bg-success/20 text-success border border-success/30;
+  }
+
+  .threat-medium {
+    @apply threat-badge bg-warning/20 text-warning border border-warning/30;
+  }
+
+  .threat-high {
+    @apply threat-badge bg-destructive/20 text-destructive border border-destructive/30;
+  }
+
+  .glass-panel {
+    @apply bg-background/50 backdrop-blur-md border border-border/50 rounded-lg;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-[hsl(var(--forensic-cyan))];
+  }
+
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .scan-line {
+    animation: scanLine 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px -5px hsl(217 91% 60% / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px -5px hsl(217 91% 60% / 0.5);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--forensic-steel));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
